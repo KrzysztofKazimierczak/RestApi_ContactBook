@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
@@ -6,19 +7,22 @@ from pydantic import EmailStr
 
 from services.auth import auth_service
 
-conf = ConnectionConfig(
-    MAIL_USERNAME='test.python.3.group@gmail.com',
-    MAIL_PASSWORD='cicy nlog qten zgvk',
-    MAIL_FROM='test.python.3.group@gmail.com',
-    MAIL_PORT=587,
-    MAIL_SERVER='smtp.gmail.com',
-    MAIL_FROM_NAME="Test Python",
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=False,
-    USE_CREDENTIALS=True,
-    VALIDATE_CERTS=True,
-    TEMPLATE_FOLDER=Path(__file__).parent / 'templates',
+from dotenv import load_dotenv
+load_dotenv()
 
+
+conf = ConnectionConfig(
+    MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
+    MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),
+    MAIL_FROM=os.getenv("MAIL_FROM"),
+    MAIL_PORT=os.getenv("MAIL_PORT"),
+    MAIL_SERVER=os.getenv("MAIL_SERVER"),
+    MAIL_FROM_NAME=os.getenv("MAIL_FROM_NAME"),
+    MAIL_STARTTLS=os.getenv("MAIL_STARTTLS"),
+    MAIL_SSL_TLS=os.getenv("MAIL_SSL_TLS"),
+    USE_CREDENTIALS=os.getenv("USE_CREDENTIALS"),
+    VALIDATE_CERTS=os.getenv("VALIDATE_CERTS"),
+    TEMPLATE_FOLDER=Path(__file__).parent / 'templates',
 )
 
 async def send_email(email: EmailStr, username: str, host: str):
