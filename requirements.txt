@@ -1,3 +1,4 @@
+aiosmtplib==2.0.2
 alembic==1.13.1
 annotated-types==0.6.0
 anyio==4.2.0
@@ -7,10 +8,12 @@ attrs==23.2.0
 Automat==22.10.0
 bcrypt==4.1.2
 beautifulsoup4==4.12.3
+blinker==1.7.0
 certifi==2023.11.17
 cffi==1.16.0
 charset-normalizer==3.3.0
 click==8.1.7
+cloudinary==1.38.0
 colorama==0.4.6
 constantly==23.10.4
 cryptography==41.0.7
@@ -20,11 +23,11 @@ distlib==0.3.7
 dnspython==2.5.0
 ecdsa==0.18.0
 email-validator==2.1.0.post1
-Faker==19.11.0
 fastapi==0.109.0
+fastapi-limiter==0.1.6
+fastapi-mail==1.4.1
 filelock==3.13.1
 greenlet==3.0.3
--e git+https://github.com/sebastianLedzianowski/grupProject3.git@bb74147d94e81b5e76782b62af98b1c570a2b4fb#egg=grupProject3
 h11==0.14.0
 httpcore==1.0.2
 httptools==0.6.1
@@ -64,6 +67,7 @@ python-jose==3.3.0
 python-multipart==0.0.6
 PyYAML==6.0.1
 queuelib==1.6.2
+redis==5.0.1
 requests==2.31.0
 requests-file==1.5.1
 rsa==4.9
