@@ -4,9 +4,7 @@ from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
 from fastapi.middleware.cors import CORSMiddleware
 import redis.asyncio as redis
-
-from routes import contacts, auth
-
+from routes import contacts, auth, users
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,6 +23,8 @@ app.add_middleware(
 
 app.include_router(contacts.router, prefix='/api')
 app.include_router(auth.router, prefix='/api')
+app.include_router(users.router, prefix='/api')
+
 
 rate_limit = RateLimiter(times=10, seconds=60)
 
