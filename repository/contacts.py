@@ -2,10 +2,23 @@ from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from database.models import Contact, User
-from schemas import ContactModel, ContactUpdate
+from schemas import ContactModel
 from datetime import date, timedelta
 
 async def create_contact(body: ContactModel, user: User, db: Session) -> Contact:
+    """
+    Create new contact
+
+    Args:
+        body (ContactModel): Data for the new contact.
+        user (User): The authenticated user.
+        db (Session): SQLAlchemy database session.
+
+    Returns:
+        Contact: The created contact.
+    """
+
+
     contact = Contact(
         first_name=body.first_name,
         last_name=body.last_name,
@@ -22,16 +35,54 @@ async def create_contact(body: ContactModel, user: User, db: Session) -> Contact
     return contact
 
 async def get_contacts(skip: int, limit: int, user: User, db: Session) -> List[Contact]:
+    """
+    Get all contacts
+
+    Args:
+        skip (int): Number of records to skip
+        limit (int): Maximum number of records to retrieve
+        user (User): The authenticated user
+        db (Session): SQLAlchemy database session
+
+    Returns:
+        List[Contact]: The list of contacts
+    """
+
     contacts = db.query(Contact).filter(Contact.user_id == user.id).offset(skip).limit(limit).all()
     db.close()
     return contacts
 
 async def get_contact(contact_id: int, user: User, db: Session) -> Contact:
+    """
+    Get contact by ID
+
+    Args:
+        contact_id (int): ID of the contact to retrieve
+        user (User): The authenticated user
+        db (Session): SQLAlchemy database session
+
+    Returns:
+        Contact: The requested contact
+    """
+
     contact = db.query(Contact).filter(and_(Contact.id == contact_id,Contact.user_id == user.id)).first()
     db.close()
     return contact
 
-async def update_contact(contact_id: int, body: ContactUpdate, user: User, db: Session) -> Contact:
+async def update_contact(contact_id: int, body: ContactModel, user: User, db: Session) -> Contact:
+    """
+    Update contact
+
+    Args:
+        contact_id (int): ID of the contact to update
+        body (ContactModel): Data for the updated contact
+        user (User): The authenticated user
+        db (Session): SQLAlchemy database session
+
+    Returns:
+        Contact: The updated contact
+    """
+
     contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
     if contact:
         contact.first_name = body.first_name
@@ -46,6 +97,18 @@ async def update_contact(contact_id: int, body: ContactUpdate, user: User, db: S
 
 
 async def delete_contact(contact_id: int, user: User, db: Session) -> Contact:
+    """
+    Delete contact
+
+    Args:
+        contact_id (int): ID of the contact to delete
+        user (User): The authenticated user
+        db (Session): SQLAlchemy database session
+
+    Returns:
+        Contact: The deleted contact
+    """
+
     contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
     if contact:
         db.delete(contact)
@@ -53,6 +116,16 @@ async def delete_contact(contact_id: int, user: User, db: Session) -> Contact:
     return contact
 
 async def get_upcoming_birthdays(user: User, db: Session):
+    """
+    Get upcoming birthdays
+
+    Args:
+        user (User): The authenticated user
+        db (Session): SQLAlchemy database session
+
+    Returns:
+        List[Contact]: The list of upcoming birthdays
+    """
     today = date.today()
     seven_days_later = today + timedelta(days=7)
     contacts = db.query(Contact).filter(and_(Contact.birth_date >= today, Contact.birth_date <= seven_days_later, Contact.user_id == user.id)).all()

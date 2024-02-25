@@ -21,6 +21,15 @@ rate_limit = RateLimiter(times=10, seconds=60)
 
 @router.get("/me/", response_model=UserDb, dependencies=[Depends(rate_limit)])
 async def read_users_me(current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Read the authenticated user's profile
+
+    Args:
+        current_user (User, optional): The authenticated user.
+
+    Returns:
+        UserDb: The authenticated user's profile.
+    """
     return current_user
 
 
@@ -28,6 +37,18 @@ async def read_users_me(current_user: User = Depends(auth_service.get_current_us
 async def update_avatar_user(file: UploadFile = File(),
                              current_user: User = Depends(auth_service.get_current_user),
                              db: Session = Depends(get_db)):
+    """
+    Update the authenticated user's avatar
+
+    Args:
+        file (UploadFile, optional): The avatar file.
+        current_user (User, optional): The authenticated user.
+        db (Session, optional): SQLAlchemy database session.
+
+    Returns:
+        UserDb: The authenticated user's updated profile.
+    """
+
     cloudinary.config(
         cloud_name=os.getenv("CLOUDINARY_NAME"),
         api_key=os.getenv("CLOUDINARY_API_KEY"),

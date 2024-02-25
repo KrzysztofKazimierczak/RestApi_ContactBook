@@ -26,6 +26,18 @@ conf = ConnectionConfig(
 )
 
 async def send_email(email: EmailStr, username: str, host: str):
+    """
+    Sends an email to the specified email address.
+
+    Args:
+        email (EmailStr): The email address to send the email to.
+        username (str): The username of the user.
+        host (str): The host of the server.
+
+    Raises:
+        ConnectionErrors: If there is an error connecting to the mail server.
+    """
+
     try:
         token_verification = auth_service.create_email_token({"sub": email})
         message = MessageSchema(
